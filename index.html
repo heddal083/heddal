@@ -3,87 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>캐릭터 소개</title>
+<title>Character Intro</title>
 
 <style>
-body {
+* {
     margin: 0;
-    background: #0f0f1a;
-    color: white;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
     font-family: 'Pretendard', sans-serif;
+    background: linear-gradient(135deg, #0f0f1a, #1c1c3c, #101022);
+    background-size: 400% 400%;
+    animation: bgMove 12s ease infinite;
+    color: white;
+    overflow-x: hidden;
+}
+
+@keyframes bgMove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.section {
+    min-height: 100vh;
+    padding: 100px 20px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
-.typing-box {
-    font-size: 1.8rem;
-    border-right: 3px solid #ff4c88;
-    padding-right: 5px;
-    white-space: nowrap;
-    overflow: hidden;
+/* 히어로 */
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.cursor {
+.hero p {
+    opacity: 0.8;
+    text-align: center;
+}
+
+/* 유리 채팅창 */
+.chat-box {
+    width: 90%;
+    max-width: 600px;
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.message {
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.1);
+    animation: fadeUp 1s ease forwards;
+    opacity: 0;
+}
+
+.message:nth-child(1) { animation-delay: 0.3s; }
+.message:nth-child(2) { animation-delay: 0.8s; }
+.message:nth-child(3) { animation-delay: 1.3s; }
+
+@keyframes fadeUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* 플레이 버튼 */
+.play-section {
+    text-align: center;
+}
+
+.play-btn {
     display: inline-block;
-    width: 10px;
-    animation: blink 0.7s infinite;
+    margin-top: 50px;
+    padding: 20px 60px;
+    font-size: 1.5rem;
+    border-radius: 50px;
+    background: linear-gradient(45deg, #ff4c88, #ff2f70);
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 10px 40px rgba(255,76,136,0.6);
+    transition: 0.3s ease;
 }
 
-@keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0; }
-    100% { opacity: 1; }
+.play-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 15px 50px rgba(255,76,136,0.8);
 }
 </style>
 </head>
 
 <body>
 
-<div class="typing-box" id="typing"></div>
+<section class="section hero">
+    <h1>캐릭터 이름</h1>
+    <p>이 아래에서, 그가 말을 시작한다.</p>
+</section>
 
-<script>
-const lines = [
-    "……여기까지 온 거야?",
-    "생각보다 끈질기네.",
-    "그래, 그럼 나랑 놀아보자."
-];
+<section class="section">
+    <div class="chat-box">
+        <div class="message">……여기까지 온 거야?</div>
+        <div class="message">생각보다 끈질기네.</div>
+        <div class="message">그래. 그럼 나랑 놀아보자.</div>
+    </div>
+</section>
 
-let lineIndex = 0;
-let charIndex = 0;
-let currentText = "";
-let isDeleting = false;
-const typingSpeed = 80;
-const deletingSpeed = 40;
-const delayBetweenLines = 1500;
-
-function typeEffect() {
-    const typingElement = document.getElementById("typing");
-    const fullText = lines[lineIndex];
-
-    if (!isDeleting) {
-        currentText = fullText.substring(0, charIndex++);
-        typingElement.textContent = currentText;
-
-        if (charIndex > fullText.length) {
-            setTimeout(() => isDeleting = true, delayBetweenLines);
-        }
-    } else {
-        currentText = fullText.substring(0, charIndex--);
-        typingElement.textContent = currentText;
-
-        if (charIndex < 0) {
-            isDeleting = false;
-            lineIndex = (lineIndex + 1) % lines.length;
-        }
-    }
-
-    setTimeout(typeEffect, isDeleting ? deletingSpeed : typingSpeed);
-}
-
-typeEffect();
-</script>
+<section class="section play-section">
+    <a href="https://zeta-ai.io/ko/plots/3aeabb04-629f-40fe-998a-cae7eccd52cc/profile?share_id=f5jy9ulzg"
+       target="_blank"
+       class="play-btn">
+       ▶ 플레이 하기
+    </a>
+</section>
 
 </body>
 </html>
