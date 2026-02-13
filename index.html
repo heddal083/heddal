@@ -4,90 +4,86 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>캐릭터 소개</title>
+
 <style>
-    body {
-        margin: 0;
-        font-family: 'Pretendard', sans-serif;
-        background: linear-gradient(#0f0f1a, #1a1a2e);
-        color: white;
-        line-height: 1.6;
-    }
+body {
+    margin: 0;
+    background: #0f0f1a;
+    color: white;
+    font-family: 'Pretendard', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-    .section {
-        padding: 100px 20px;
-        max-width: 900px;
-        margin: auto;
-    }
+.typing-box {
+    font-size: 1.8rem;
+    border-right: 3px solid #ff4c88;
+    padding-right: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+}
 
-    .hero {
-        text-align: center;
-        padding-top: 150px;
-    }
+.cursor {
+    display: inline-block;
+    width: 10px;
+    animation: blink 0.7s infinite;
+}
 
-    h1 {
-        font-size: 3rem;
-        margin-bottom: 20px;
-    }
-
-    .profile-img {
-        width: 220px;
-        border-radius: 20px;
-        margin-bottom: 30px;
-    }
-
-    .description {
-        font-size: 1.1rem;
-        opacity: 0.9;
-    }
-
-    .play-section {
-        text-align: center;
-        padding: 150px 20px;
-    }
-
-    .play-btn {
-        background: #ff4c88;
-        color: white;
-        font-size: 1.5rem;
-        padding: 18px 50px;
-        border-radius: 50px;
-        text-decoration: none;
-        transition: 0.3s;
-        box-shadow: 0 10px 30px rgba(255,76,136,0.4);
-    }
-
-    .play-btn:hover {
-        background: #ff2f70;
-        transform: scale(1.05);
-    }
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
 </style>
 </head>
+
 <body>
 
-<section class="section hero">
-    <h1>캐릭터 이름</h1>
-    <img src="캐릭터이미지주소.jpg" class="profile-img">
-    <p class="description">
-        이곳에 캐릭터 설정을 작성하세요.<br>
-        성격, 배경 스토리, 세계관, 관계성 등등.<br>
-        아래로 스크롤하면 플레이 버튼이 등장합니다.
-    </p>
-</section>
+<div class="typing-box" id="typing"></div>
 
-<section class="section">
-    <h2>세계관</h2>
-    <p>
-        세계관 설명을 길게 적으세요. 스크롤을 유도하는 구조.
-    </p>
-</section>
+<script>
+const lines = [
+    "……여기까지 온 거야?",
+    "생각보다 끈질기네.",
+    "그래, 그럼 나랑 놀아보자."
+];
 
-<section class="play-section">
-    <a href="https://zeta-ai.io/ko/plots/3aeabb04-629f-40fe-998a-cae7eccd52cc/profile?share_id=f5jy9ulzg"
-       target="_blank"
-       class="play-btn">
-       ▶ 플레이 하기
-    </a>
-</section>
+let lineIndex = 0;
+let charIndex = 0;
+let currentText = "";
+let isDeleting = false;
+const typingSpeed = 80;
+const deletingSpeed = 40;
+const delayBetweenLines = 1500;
+
+function typeEffect() {
+    const typingElement = document.getElementById("typing");
+    const fullText = lines[lineIndex];
+
+    if (!isDeleting) {
+        currentText = fullText.substring(0, charIndex++);
+        typingElement.textContent = currentText;
+
+        if (charIndex > fullText.length) {
+            setTimeout(() => isDeleting = true, delayBetweenLines);
+        }
+    } else {
+        currentText = fullText.substring(0, charIndex--);
+        typingElement.textContent = currentText;
+
+        if (charIndex < 0) {
+            isDeleting = false;
+            lineIndex = (lineIndex + 1) % lines.length;
+        }
+    }
+
+    setTimeout(typeEffect, isDeleting ? deletingSpeed : typingSpeed);
+}
+
+typeEffect();
+</script>
 
 </body>
 </html>
