@@ -3,149 +3,175 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Launcher</title>
+<title>Character Intro</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
 
 body {
-    height: 100vh;
-    background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 70%);
     font-family: 'Pretendard', sans-serif;
-    color: #e0e0ff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* 중앙 런처 패널 */
-.launcher {
-    width: 420px;
-    background: rgba(20,20,40,0.85);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.6);
-}
-
-/* 헤더 */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.status {
-    font-size: 0.8rem;
-    color: #00ff99;
-}
-
-.status::before {
-    content: "● ";
-}
-
-/* 캐릭터 이름 */
-.character-name {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
-}
-
-/* 스탯 */
-.stats {
-    margin: 20px 0;
-}
-
-.stat {
-    margin-bottom: 8px;
-}
-
-.bar {
-    height: 6px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-.fill {
-    height: 100%;
-    background: linear-gradient(90deg, #ff4c88, #ff2f70);
-}
-
-/* 로그창 */
-.log-box {
-    background: rgba(0,0,0,0.4);
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    height: 80px;
-    overflow: hidden;
-    margin-top: 15px;
-}
-
-/* 버튼 */
-.start-btn {
-    display: block;
-    width: 100%;
-    text-align: center;
-    margin-top: 25px;
-    padding: 15px;
-    border-radius: 10px;
-    background: linear-gradient(45deg, #ff4c88, #ff2f70);
+    background: linear-gradient(135deg, #0f0f1a, #1c1c3c, #101022);
+    background-size: 400% 400%;
+    animation: bgMove 15s ease infinite;
     color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
+    overflow-x:hidden;
 }
 
-.start-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(255,76,136,0.7);
+@keyframes bgMove {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+}
+
+.section {
+    min-height:100vh;
+    padding:100px 20px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+/* 히어로 */
+.hero h1 {
+    font-size:3rem;
+    margin-bottom:20px;
+}
+
+.hero p {
+    opacity:0.8;
+}
+
+/* 유리 채팅창 */
+.chat-box {
+    width:90%;
+    max-width:600px;
+    backdrop-filter:blur(15px);
+    background:rgba(255,255,255,0.08);
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+
+.message {
+    margin-bottom:20px;
+    padding:15px 20px;
+    border-radius:15px;
+    background:rgba(255,255,255,0.1);
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadeUp 1s ease forwards;
+}
+
+.message:nth-child(1){animation-delay:0.3s;}
+.message:nth-child(2){animation-delay:0.8s;}
+.message:nth-child(3){animation-delay:1.3s;}
+
+@keyframes fadeUp {
+    to { opacity:1; transform:translateY(0); }
+}
+
+/* 플레이 버튼 */
+.play-btn {
+    margin-top:60px;
+    padding:20px 60px;
+    font-size:1.4rem;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(45deg,#ff4c88,#ff2f70);
+    color:white;
+    cursor:pointer;
+    transition:0.3s ease;
+    box-shadow:0 10px 40px rgba(255,76,136,0.6);
+}
+
+.play-btn:hover {
+    transform:scale(1.08);
+    box-shadow:0 15px 50px rgba(255,76,136,0.8);
+}
+
+/* 로딩 오버레이 */
+#loading-screen {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#0f0f1a;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:0.4s ease;
+    z-index:999;
+}
+
+#loading-screen.active {
+    opacity:1;
+    pointer-events:all;
+}
+
+.loader {
+    width:60px;
+    height:60px;
+    border:5px solid rgba(255,255,255,0.1);
+    border-top:5px solid #ff4c88;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform:rotate(360deg); }
+}
+
+.loading-text {
+    margin-top:20px;
+    letter-spacing:3px;
+    font-size:0.9rem;
+    opacity:0.8;
 }
 </style>
 </head>
 
 <body>
 
-<div class="launcher">
+<section class="section hero">
+    <h1>캐릭터 이름</h1>
+    <p>이 아래에서, 그가 말을 시작한다.</p>
+</section>
 
-    <div class="header">
-        <div>CHARACTER SYSTEM</div>
-        <div class="status">ONLINE</div>
+<section class="section">
+    <div class="chat-box">
+        <div class="message">……여기까지 온 거야?</div>
+        <div class="message">생각보다 끈질기네.</div>
+        <div class="message">그래. 그럼 나랑 놀아보자.</div>
     </div>
 
-    <div class="character-name">캐릭터 이름</div>
-    <div>프로필 요약 한 줄 설명.</div>
+    <button class="play-btn" onclick="startLoading()">
+        ▶ 플레이 하기
+    </button>
+</section>
 
-    <div class="stats">
-        <div class="stat">호감도
-            <div class="bar"><div class="fill" style="width: 70%;"></div></div>
-        </div>
-        <div class="stat">위험도
-            <div class="bar"><div class="fill" style="width: 40%;"></div></div>
-        </div>
-        <div class="stat">집착도
-            <div class="bar"><div class="fill" style="width: 85%;"></div></div>
-        </div>
-    </div>
-
-    <div class="log-box">
-        > 시스템 초기화 완료<br>
-        > 사용자 접속 감지<br>
-        > 상호작용 준비됨...
-    </div>
-
-    <a href="https://zeta-ai.io/ko/plots/3aeabb04-629f-40fe-998a-cae7eccd52cc/profile?share_id=f5jy9ulzg"
-       target="_blank"
-       class="start-btn">
-       ▶ START
-    </a>
-
+<div id="loading-screen">
+    <div class="loader"></div>
+    <div class="loading-text">CONNECTING...</div>
 </div>
+
+<script>
+function startLoading() {
+    const loading = document.getElementById("loading-screen");
+    loading.classList.add("active");
+
+    setTimeout(() => {
+        window.location.href = "https://zeta-ai.io/ko/plots/3aeabb04-629f-40fe-998a-cae7eccd52cc/profile?share_id=f5jy9ulzg";
+    }, 2500);
+}
+</script>
 
 </body>
 </html>
