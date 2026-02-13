@@ -12,17 +12,36 @@ html { scroll-behavior:smooth; }
 
 body {
     font-family: 'Pretendard', sans-serif;
-    background: linear-gradient(135deg, #0f0f1a, #1c1c3c, #101022);
-    background-size: 400% 400%;
-    animation: bgMove 15s ease infinite;
-    color: white;
+    background: #1a1a1d;
+    color: #e5e5f0;
     overflow-x:hidden;
 }
 
-@keyframes bgMove {
-    0% {background-position:0% 50%;}
-    50% {background-position:100% 50%;}
-    100% {background-position:0% 50%;}
+/* 미세 필름 노이즈 */
+body::before {
+    content:"";
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    background-image:url("https://www.transparenttextures.com/patterns/noise.png");
+    opacity:0.04;
+    z-index:1000;
+}
+
+/* 비네팅 */
+body::after {
+    content:"";
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    box-shadow:inset 0 0 150px rgba(0,0,0,0.8);
+    z-index:999;
 }
 
 .section {
@@ -39,28 +58,31 @@ body {
 .hero h1 {
     font-size:3rem;
     margin-bottom:20px;
+    color:#c084fc;
 }
 
 .hero p {
-    opacity:0.8;
+    opacity:0.7;
 }
 
 /* 유리 채팅창 */
 .chat-box {
     width:90%;
     max-width:600px;
-    backdrop-filter:blur(15px);
-    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(12px);
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(192,132,252,0.2);
     border-radius:20px;
     padding:30px;
-    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+    box-shadow:0 0 40px rgba(0,0,0,0.6);
 }
 
 .message {
     margin-bottom:20px;
     padding:15px 20px;
     border-radius:15px;
-    background:rgba(255,255,255,0.1);
+    background:rgba(192,132,252,0.08);
+    border:1px solid rgba(192,132,252,0.15);
     opacity:0;
     transform:translateY(20px);
     animation:fadeUp 1s ease forwards;
@@ -81,16 +103,16 @@ body {
     font-size:1.4rem;
     border:none;
     border-radius:50px;
-    background:linear-gradient(45deg,#ff4c88,#ff2f70);
+    background:linear-gradient(45deg,#a855f7,#7e22ce);
     color:white;
     cursor:pointer;
     transition:0.3s ease;
-    box-shadow:0 10px 40px rgba(255,76,136,0.6);
+    box-shadow:0 10px 40px rgba(168,85,247,0.5);
 }
 
 .play-btn:hover {
     transform:scale(1.08);
-    box-shadow:0 15px 50px rgba(255,76,136,0.8);
+    box-shadow:0 15px 50px rgba(168,85,247,0.8);
 }
 
 /* 로딩 오버레이 */
@@ -100,7 +122,7 @@ body {
     left:0;
     width:100%;
     height:100%;
-    background:#0f0f1a;
+    background:#1a1a1d;
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -108,7 +130,7 @@ body {
     opacity:0;
     pointer-events:none;
     transition:0.4s ease;
-    z-index:999;
+    z-index:2000;
 }
 
 #loading-screen.active {
@@ -120,7 +142,7 @@ body {
     width:60px;
     height:60px;
     border:5px solid rgba(255,255,255,0.1);
-    border-top:5px solid #ff4c88;
+    border-top:5px solid #a855f7;
     border-radius:50%;
     animation:spin 1s linear infinite;
 }
@@ -133,7 +155,7 @@ body {
     margin-top:20px;
     letter-spacing:3px;
     font-size:0.9rem;
-    opacity:0.8;
+    opacity:0.7;
 }
 </style>
 </head>
@@ -142,7 +164,7 @@ body {
 
 <section class="section hero">
     <h1>캐릭터 이름</h1>
-    <p>이 아래에서, 그가 말을 시작한다.</p>
+    <p>접속을 감지했습니다.</p>
 </section>
 
 <section class="section">
