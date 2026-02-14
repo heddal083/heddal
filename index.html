@@ -3,122 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Character Intro</title>
+<title>Character System</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-
 body{
     font-family:'Pretendard',sans-serif;
     background:#1a1a1d;
     color:#e5e5f0;
     overflow-x:hidden;
-    position:relative;
 }
 
-/* 🎞 필름 노이즈 */
+/* 노이즈 */
 body::before{
     content:"";
     position:fixed;
     inset:0;
-    pointer-events:none;
     background-image:url("https://www.transparenttextures.com/patterns/noise.png");
     opacity:0.04;
-    z-index:1000;
-}
-
-/* 🌑 비네팅 */
-body::after{
-    content:"";
-    position:fixed;
-    inset:0;
     pointer-events:none;
-    box-shadow:inset 0 0 150px rgba(0,0,0,0.8);
-    z-index:999;
 }
 
-/* ✨ 퍼플 파티클 */
+/* 파티클 */
 .particles{
     position:fixed;
     inset:0;
     pointer-events:none;
     z-index:0;
-    overflow:hidden;
 }
-
 .particles span{
     position:absolute;
-    width:3px;
-    height:3px;
+    width:3px;height:3px;
     background:#a855f7;
     border-radius:50%;
     opacity:0.15;
     animation:float 20s linear infinite;
 }
-
 @keyframes float{
     from{transform:translateY(100vh);}
     to{transform:translateY(-10vh);}
 }
-    
-.hero h1{
-    font-size:3rem;
-    margin-bottom:20px;
+
+/* 상단 탭 */
+.top-menu{
+    position:fixed;
+    top:0;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
+    background:rgba(0,0,0,0.3);
+    backdrop-filter:blur(10px);
+    z-index:10;
+}
+.menu-btn{
+    padding:10px 25px;
+    border-radius:30px;
+    border:1px solid rgba(168,85,247,0.4);
+    background:transparent;
     color:#c084fc;
+    cursor:pointer;
+    transition:0.3s;
+}
+.menu-btn.active,
+.menu-btn:hover{
+    background:linear-gradient(45deg,#a855f7,#7e22ce);
+    color:white;
 }
 
-.hero p{opacity:0.7;}
+/* 공통 섹션 */
+.section{
+    min-height:100vh;
+    display:none;
+    padding:140px 20px 80px;
+    text-align:center;
+}
+.section.active{display:block;}
 
+/* 소개 */
 .chat-box{
-    width:90%;
     max-width:600px;
+    margin:0 auto;
+    padding:30px;
+    border-radius:20px;
     backdrop-filter:blur(12px);
     background:rgba(255,255,255,0.05);
     border:1px solid rgba(192,132,252,0.2);
-    border-radius:20px;
-    padding:30px;
-    box-shadow:0 0 40px rgba(0,0,0,0.6);
 }
-
 .message{
     margin-bottom:20px;
-    padding:15px 20px;
+    padding:15px;
     border-radius:15px;
     background:rgba(192,132,252,0.08);
-    border:1px solid rgba(192,132,252,0.15);
-    opacity:0;
-    transform:translateY(20px);
-    animation:fadeUp 1s ease forwards;
 }
 
-.message:nth-child(1){animation-delay:0.3s;}
-.message:nth-child(2){animation-delay:0.8s;}
-.message:nth-child(3){animation-delay:1.3s;}
-
-@keyframes fadeUp{
-    to{opacity:1;transform:translateY(0);}
+/* 선택지 */
+.vn-box{
+    max-width:600px;
+    margin:0 auto;
+    padding:30px;
+    border-radius:20px;
+    backdrop-filter:blur(12px);
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(192,132,252,0.2);
 }
-
-.play-btn{
-    margin-top:60px;
-    padding:20px 60px;
-    font-size:1.4rem;
+.choice-btn{
+    display:block;
+    width:100%;
+    margin:15px 0;
+    padding:15px;
     border:none;
-    border-radius:50px;
+    border-radius:10px;
+    background:rgba(168,85,247,0.2);
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+.choice-btn:hover{
+    background:linear-gradient(45deg,#a855f7,#7e22ce);
+}
+
+/* 플레이 버튼 */
+.play-btn{
+    margin-top:40px;
+    padding:15px 40px;
+    border:none;
+    border-radius:40px;
     background:linear-gradient(45deg,#a855f7,#7e22ce);
     color:white;
     cursor:pointer;
-    transition:0.3s ease;
-    box-shadow:0 10px 40px rgba(168,85,247,0.5);
 }
 
-.play-btn:hover{
-    transform:scale(1.08);
-    box-shadow:0 15px 50px rgba(168,85,247,0.8);
-}
-
-/* 🔥 로딩 오버레이 */
+/* 로딩 */
 #loading-screen{
     position:fixed;
     inset:0;
@@ -129,48 +146,30 @@ body::after{
     align-items:center;
     opacity:0;
     pointer-events:none;
-    transition:0.4s ease;
-    z-index:2000;
+    transition:0.4s;
 }
-
 #loading-screen.active{
     opacity:1;
     pointer-events:all;
 }
-
 .loader{
-    width:60px;
-    height:60px;
+    width:60px;height:60px;
     border:5px solid rgba(255,255,255,0.1);
     border-top:5px solid #a855f7;
     border-radius:50%;
     animation:spin 1s linear infinite;
 }
-
 @keyframes spin{to{transform:rotate(360deg);}}
-
-/* 🟣 스캔 라인 */
 .scan-line{
-    position:absolute;
-    top:50%;
-    left:0;
     width:100%;
     height:2px;
+    margin-top:20px;
     background:linear-gradient(to right,transparent,#a855f7,transparent);
     animation:scan 2s linear infinite;
-    opacity:0.5;
 }
-
 @keyframes scan{
-    from{transform:translateY(-40px);}
-    to{transform:translateY(40px);}
-}
-
-.loading-text{
-    margin-top:30px;
-    letter-spacing:3px;
-    font-size:0.9rem;
-    opacity:0.7;
+    from{transform:translateY(-10px);}
+    to{transform:translateY(10px);}
 }
 </style>
 </head>
@@ -179,48 +178,70 @@ body::after{
 
 <div class="particles"></div>
 
-<section class="section hero">
-    <h1>캐릭터 이름</h1>
-    <img src="캐릭터이미지주소.jpg" class="profile-img">
-    <p class="description">
-        이곳에 캐릭터 설정을 작성하세요.<br>
-        성격, 배경 스토리, 세계관, 관계성 등등.<br>
-        아래로 스크롤하면 플레이 버튼이 등장합니다.
+<div class="top-menu">
+    <button class="menu-btn active" onclick="showSection('intro',this)">소개</button>
+    <button class="menu-btn" onclick="showSection('vn',this)">선택지</button>
+</div>
 
-<section class="section">
+<!-- 소개 섹션 -->
+<section id="intro" class="section active">
+    <h1 style="color:#c084fc;">캐릭터 이름</h1>
     <div class="chat-box">
         <div class="message">……여기까지 온 거야?</div>
         <div class="message">생각보다 끈질기네.</div>
         <div class="message">그래. 그럼 나랑 놀아보자.</div>
     </div>
+    <button class="play-btn" onclick="startLoading()">▶ 플레이 하기</button>
+</section>
 
-    <button class="play-btn" onclick="startLoading()">
-        ▶ 플레이 하기
-    </button>
+<!-- 선택지 섹션 -->
+<section id="vn" class="section">
+    <div class="vn-box">
+        <h2 style="color:#c084fc;margin-bottom:20px;">그가 묻는다.</h2>
+        <p id="vn-text">왜 나를 찾아왔지?</p>
+
+        <button class="choice-btn" onclick="choose(1)">그냥 궁금해서.</button>
+        <button class="choice-btn" onclick="choose(2)">널 좋아하니까.</button>
+        <button class="choice-btn" onclick="choose(3)">도망칠 생각이야.</button>
+    </div>
 </section>
 
 <div id="loading-screen">
     <div class="loader"></div>
     <div class="scan-line"></div>
-    <div class="loading-text">CONNECTING...</div>
+    <div style="margin-top:20px;">CONNECTING...</div>
 </div>
 
 <script>
-/* 퍼플 파티클 생성 */
-const particlesContainer=document.querySelector(".particles");
-for(let i=0;i<40;i++){
-    const span=document.createElement("span");
-    span.style.left=Math.random()*100+"%";
-    span.style.animationDuration=(15+Math.random()*10)+"s";
-    span.style.animationDelay=Math.random()*5+"s";
-    particlesContainer.appendChild(span);
+/* 파티클 */
+const p=document.querySelector(".particles");
+for(let i=0;i<35;i++){
+    const s=document.createElement("span");
+    s.style.left=Math.random()*100+"%";
+    s.style.animationDuration=(15+Math.random()*10)+"s";
+    p.appendChild(s);
+}
+
+/* 탭 전환 */
+function showSection(id,btn){
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    document.querySelectorAll(".menu-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+}
+
+/* 선택지 반응 */
+function choose(n){
+    const text=document.getElementById("vn-text");
+    if(n===1) text.innerText="호기심은 위험해.";
+    if(n===2) text.innerText="…그 말, 후회하지 마.";
+    if(n===3) text.innerText="도망? 이미 늦었어.";
 }
 
 /* 로딩 */
 function startLoading(){
-    const loading=document.getElementById("loading-screen");
-    loading.classList.add("active");
-
+    const l=document.getElementById("loading-screen");
+    l.classList.add("active");
     setTimeout(()=>{
         window.location.href="https://zeta-ai.io/ko/plots/3aeabb04-629f-40fe-998a-cae7eccd52cc/profile?share_id=f5jy9ulzg";
     },2500);
