@@ -29,7 +29,6 @@ body::before{
     position:fixed;
     inset:0;
     pointer-events:none;
-    z-index:0;
 }
 .particles span{
     position:absolute;
@@ -44,18 +43,16 @@ body::before{
     to{transform:translateY(-10vh);}
 }
 
-/* 상단 탭 */
+/* 상단 메뉴 */
 .top-menu{
     position:fixed;
-    top:0;
-    width:100%;
+    top:0;width:100%;
     display:flex;
     justify-content:center;
     gap:20px;
     padding:20px;
     background:rgba(0,0,0,0.3);
     backdrop-filter:blur(10px);
-    z-index:10;
 }
 .menu-btn{
     padding:10px 25px;
@@ -64,7 +61,6 @@ body::before{
     background:transparent;
     color:#c084fc;
     cursor:pointer;
-    transition:0.3s;
 }
 .menu-btn.active,
 .menu-btn:hover{
@@ -72,7 +68,7 @@ body::before{
     color:white;
 }
 
-/* 공통 섹션 */
+/* 섹션 */
 .section{
     min-height:100vh;
     display:none;
@@ -82,20 +78,39 @@ body::before{
 .section.active{display:block;}
 
 /* 소개 */
+.character-img{
+    width:220px;
+    border-radius:20px;
+    margin-bottom:20px;
+    box-shadow:0 0 25px rgba(168,85,247,0.5);
+}
+.world-desc{
+    max-width:600px;
+    margin:20px auto;
+    opacity:0.8;
+    line-height:1.6;
+}
+
 .chat-box{
     max-width:600px;
-    margin:0 auto;
+    margin:30px auto;
     padding:30px;
     border-radius:20px;
     backdrop-filter:blur(12px);
     background:rgba(255,255,255,0.05);
     border:1px solid rgba(192,132,252,0.2);
 }
-.message{
-    margin-bottom:20px;
-    padding:15px;
-    border-radius:15px;
-    background:rgba(192,132,252,0.08);
+
+.play-btn{
+    margin-top:50px;
+    padding:22px 70px;
+    font-size:1.6rem;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(45deg,#a855f7,#7e22ce);
+    color:white;
+    cursor:pointer;
+    box-shadow:0 10px 40px rgba(168,85,247,0.6);
 }
 
 /* 선택지 */
@@ -118,40 +133,31 @@ body::before{
     background:rgba(168,85,247,0.2);
     color:white;
     cursor:pointer;
-    transition:0.3s;
 }
 .choice-btn:hover{
     background:linear-gradient(45deg,#a855f7,#7e22ce);
 }
 
-/* 플레이 버튼 */
-.play-btn{
-    margin-top:40px;
-    padding:15px 40px;
-    border:none;
-    border-radius:40px;
-    background:linear-gradient(45deg,#a855f7,#7e22ce);
-    color:white;
-    cursor:pointer;
+.vn-image{
+    margin-top:25px;
+    max-width:100%;
+    border-radius:15px;
+    display:none;
+    box-shadow:0 0 25px rgba(168,85,247,0.4);
 }
 
 /* 로딩 */
 #loading-screen{
-    position:fixed;
-    inset:0;
+    position:fixed;inset:0;
     background:#1a1a1d;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    opacity:0;
-    pointer-events:none;
+    opacity:0;pointer-events:none;
     transition:0.4s;
 }
-#loading-screen.active{
-    opacity:1;
-    pointer-events:all;
-}
+#loading-screen.active{opacity:1;pointer-events:all;}
 .loader{
     width:60px;height:60px;
     border:5px solid rgba(255,255,255,0.1);
@@ -161,9 +167,7 @@ body::before{
 }
 @keyframes spin{to{transform:rotate(360deg);}}
 .scan-line{
-    width:100%;
-    height:2px;
-    margin-top:20px;
+    width:100%;height:2px;margin-top:20px;
     background:linear-gradient(to right,transparent,#a855f7,transparent);
     animation:scan 2s linear infinite;
 }
@@ -183,26 +187,38 @@ body::before{
     <button class="menu-btn" onclick="showSection('vn',this)">선택지</button>
 </div>
 
-<!-- 소개 섹션 -->
+<!-- 소개 -->
 <section id="intro" class="section active">
+
+    <!-- 🔽 여기에 이미지 링크 넣으면 됨 -->
+    <img src="여기에_캐릭터이미지링크.jpg" class="character-img">
+
     <h1 style="color:#c084fc;">캐릭터 이름</h1>
-    <div class="chat-box">
-        <div class="message">……여기까지 온 거야?</div>
-        <div class="message">생각보다 끈질기네.</div>
-        <div class="message">그래. 그럼 나랑 놀아보자.</div>
+
+    <!-- 🔽 세계관 설명 영역 -->
+    <div class="world-desc">
+        이곳에 세계관 설명을 자유롭게 작성하세요.
+        설정, 관계성, 배경 스토리 등을 넣을 수 있습니다.
     </div>
+
+    <div class="chat-box">
+        ……여기까지 온 거야?
+    </div>
+
     <button class="play-btn" onclick="startLoading()">▶ 플레이 하기</button>
 </section>
 
-<!-- 선택지 섹션 -->
+<!-- 선택지 -->
 <section id="vn" class="section">
     <div class="vn-box">
-        <h2 style="color:#c084fc;margin-bottom:20px;">그가 묻는다.</h2>
-        <p id="vn-text">왜 나를 찾아왔지?</p>
+        <h2 style="color:#c084fc;">왜 나를 찾아왔지?</h2>
 
-        <button class="choice-btn" onclick="choose(1)">그냥 궁금해서.</button>
-        <button class="choice-btn" onclick="choose(2)">널 좋아하니까.</button>
-        <button class="choice-btn" onclick="choose(3)">도망칠 생각이야.</button>
+        <button class="choice-btn" onclick="choose(1)">궁금해서.</button>
+        <button class="choice-btn" onclick="choose(2)">좋아하니까.</button>
+        <button class="choice-btn" onclick="choose(3)">도망치려고.</button>
+
+        <!-- 🔽 선택지 이미지 출력 -->
+        <img id="vnImage" class="vn-image">
     </div>
 </section>
 
@@ -230,12 +246,13 @@ function showSection(id,btn){
     btn.classList.add("active");
 }
 
-/* 선택지 반응 */
+/* 선택지 이미지 변경 */
 function choose(n){
-    const text=document.getElementById("vn-text");
-    if(n===1) text.innerText="호기심은 위험해.";
-    if(n===2) text.innerText="…그 말, 후회하지 마.";
-    if(n===3) text.innerText="도망? 이미 늦었어.";
+    const img=document.getElementById("vnImage");
+    if(n===1) img.src="선택지1_이미지링크.jpg";
+    if(n===2) img.src="선택지2_이미지링크.jpg";
+    if(n===3) img.src="선택지3_이미지링크.jpg";
+    img.style.display="block";
 }
 
 /* 로딩 */
