@@ -6,45 +6,63 @@
 <title>Character Intro</title>
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
 
-html { scroll-behavior:smooth; }
-
-body {
-    font-family: 'Pretendard', sans-serif;
-    background: #1a1a1d;
-    color: #e5e5f0;
+body{
+    font-family:'Pretendard',sans-serif;
+    background:#1a1a1d;
+    color:#e5e5f0;
     overflow-x:hidden;
+    position:relative;
 }
 
-/* 미세 필름 노이즈 */
-body::before {
+/* 🎞 필름 노이즈 */
+body::before{
     content:"";
     position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
+    inset:0;
     pointer-events:none;
     background-image:url("https://www.transparenttextures.com/patterns/noise.png");
     opacity:0.04;
     z-index:1000;
 }
 
-/* 비네팅 */
-body::after {
+/* 🌑 비네팅 */
+body::after{
     content:"";
     position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
+    inset:0;
     pointer-events:none;
     box-shadow:inset 0 0 150px rgba(0,0,0,0.8);
     z-index:999;
 }
 
-.section {
+/* ✨ 퍼플 파티클 */
+.particles{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    overflow:hidden;
+}
+
+.particles span{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:#a855f7;
+    border-radius:50%;
+    opacity:0.15;
+    animation:float 20s linear infinite;
+}
+
+@keyframes float{
+    from{transform:translateY(100vh);}
+    to{transform:translateY(-10vh);}
+}
+
+.section{
     min-height:100vh;
     padding:100px 20px;
     display:flex;
@@ -52,21 +70,19 @@ body::after {
     justify-content:center;
     align-items:center;
     text-align:center;
+    position:relative;
+    z-index:1;
 }
 
-/* 히어로 */
-.hero h1 {
+.hero h1{
     font-size:3rem;
     margin-bottom:20px;
     color:#c084fc;
 }
 
-.hero p {
-    opacity:0.7;
-}
+.hero p{opacity:0.7;}
 
-/* 유리 채팅창 */
-.chat-box {
+.chat-box{
     width:90%;
     max-width:600px;
     backdrop-filter:blur(12px);
@@ -77,7 +93,7 @@ body::after {
     box-shadow:0 0 40px rgba(0,0,0,0.6);
 }
 
-.message {
+.message{
     margin-bottom:20px;
     padding:15px 20px;
     border-radius:15px;
@@ -92,12 +108,11 @@ body::after {
 .message:nth-child(2){animation-delay:0.8s;}
 .message:nth-child(3){animation-delay:1.3s;}
 
-@keyframes fadeUp {
-    to { opacity:1; transform:translateY(0); }
+@keyframes fadeUp{
+    to{opacity:1;transform:translateY(0);}
 }
 
-/* 플레이 버튼 */
-.play-btn {
+.play-btn{
     margin-top:60px;
     padding:20px 60px;
     font-size:1.4rem;
@@ -110,18 +125,15 @@ body::after {
     box-shadow:0 10px 40px rgba(168,85,247,0.5);
 }
 
-.play-btn:hover {
+.play-btn:hover{
     transform:scale(1.08);
     box-shadow:0 15px 50px rgba(168,85,247,0.8);
 }
 
-/* 로딩 오버레이 */
-#loading-screen {
+/* 🔥 로딩 오버레이 */
+#loading-screen{
     position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
+    inset:0;
     background:#1a1a1d;
     display:flex;
     flex-direction:column;
@@ -133,12 +145,12 @@ body::after {
     z-index:2000;
 }
 
-#loading-screen.active {
+#loading-screen.active{
     opacity:1;
     pointer-events:all;
 }
 
-.loader {
+.loader{
     width:60px;
     height:60px;
     border:5px solid rgba(255,255,255,0.1);
@@ -147,12 +159,27 @@ body::after {
     animation:spin 1s linear infinite;
 }
 
-@keyframes spin {
-    to { transform:rotate(360deg); }
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* 🟣 스캔 라인 */
+.scan-line{
+    position:absolute;
+    top:50%;
+    left:0;
+    width:100%;
+    height:2px;
+    background:linear-gradient(to right,transparent,#a855f7,transparent);
+    animation:scan 2s linear infinite;
+    opacity:0.5;
 }
 
-.loading-text {
-    margin-top:20px;
+@keyframes scan{
+    from{transform:translateY(-40px);}
+    to{transform:translateY(40px);}
+}
+
+.loading-text{
+    margin-top:30px;
     letter-spacing:3px;
     font-size:0.9rem;
     opacity:0.7;
@@ -162,10 +189,15 @@ body::after {
 
 <body>
 
+<div class="particles"></div>
+
 <section class="section hero">
     <h1>캐릭터 이름</h1>
-    <p>접속을 감지했습니다.</p>
-</section>
+    <img src="캐릭터이미지주소.jpg" class="profile-img">
+    <p class="description">
+        이곳에 캐릭터 설정을 작성하세요.<br>
+        성격, 배경 스토리, 세계관, 관계성 등등.<br>
+        아래로 스크롤하면 플레이 버튼이 등장합니다.
 
 <section class="section">
     <div class="chat-box">
@@ -181,17 +213,29 @@ body::after {
 
 <div id="loading-screen">
     <div class="loader"></div>
+    <div class="scan-line"></div>
     <div class="loading-text">CONNECTING...</div>
 </div>
 
 <script>
-function startLoading() {
-    const loading = document.getElementById("loading-screen");
+/* 퍼플 파티클 생성 */
+const particlesContainer=document.querySelector(".particles");
+for(let i=0;i<40;i++){
+    const span=document.createElement("span");
+    span.style.left=Math.random()*100+"%";
+    span.style.animationDuration=(15+Math.random()*10)+"s";
+    span.style.animationDelay=Math.random()*5+"s";
+    particlesContainer.appendChild(span);
+}
+
+/* 로딩 */
+function startLoading(){
+    const loading=document.getElementById("loading-screen");
     loading.classList.add("active");
 
-    setTimeout(() => {
-        window.location.href = "https://zeta-ai.io/ko/plots/3aeabb04-629f-40fe-998a-cae7eccd52cc/profile?share_id=f5jy9ulzg";
-    }, 2500);
+    setTimeout(()=>{
+        window.location.href="https://zeta-ai.io/ko/plots/3aeabb04-629f-40fe-998a-cae7eccd52cc/profile?share_id=f5jy9ulzg";
+    },2500);
 }
 </script>
 
