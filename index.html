@@ -5,10 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Character System</title>
 
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
+
 body{
-    font-family:'Pretendard',sans-serif;
+    font-family:'Noto Sans KR',sans-serif;
     background:#1a1a1d;
     color:#e5e5f0;
     overflow-x:hidden;
@@ -19,7 +23,7 @@ body::before{
     content:"";
     position:fixed;
     inset:0;
-    background-image:url("https://www.transparenttextures.com/patterns/noise.png");
+    background:url("https://www.transparenttextures.com/patterns/noise.png");
     opacity:0.04;
     pointer-events:none;
 }
@@ -61,6 +65,8 @@ body::before{
     background:transparent;
     color:#c084fc;
     cursor:pointer;
+    font-family:'Orbitron',sans-serif;
+    letter-spacing:1px;
 }
 .menu-btn.active,
 .menu-btn:hover{
@@ -77,6 +83,17 @@ body::before{
 }
 .section.active{display:block;}
 
+/* 제목 */
+h1,h2{
+    font-family:'Orbitron',sans-serif;
+    letter-spacing:1px;
+}
+h1{
+    font-size:2.3rem;
+    color:#c084fc;
+    text-shadow:0 0 15px rgba(168,85,247,0.6);
+}
+
 /* 소개 */
 .character-img{
     width:220px;
@@ -84,11 +101,13 @@ body::before{
     margin-bottom:20px;
     box-shadow:0 0 25px rgba(168,85,247,0.5);
 }
+
 .world-desc{
     max-width:600px;
     margin:20px auto;
-    opacity:0.8;
+    font-weight:300;
     line-height:1.6;
+    opacity:0.8;
 }
 
 .chat-box{
@@ -99,6 +118,7 @@ body::before{
     backdrop-filter:blur(12px);
     background:rgba(255,255,255,0.05);
     border:1px solid rgba(192,132,252,0.2);
+    font-size:1.05rem;
 }
 
 .play-btn{
@@ -110,40 +130,52 @@ body::before{
     background:linear-gradient(45deg,#a855f7,#7e22ce);
     color:white;
     cursor:pointer;
+    font-family:'Orbitron',sans-serif;
     box-shadow:0 10px 40px rgba(168,85,247,0.6);
 }
 
-/* 선택지 */
-.vn-box{
-    max-width:600px;
+/* 갤러리 */
+.gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:20px;
+    max-width:900px;
     margin:0 auto;
-    padding:30px;
-    border-radius:20px;
-    backdrop-filter:blur(12px);
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(192,132,252,0.2);
 }
-.choice-btn{
-    display:block;
+.gallery-grid img{
     width:100%;
-    margin:15px 0;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    background:rgba(168,85,247,0.2);
-    color:white;
+    border-radius:15px;
     cursor:pointer;
+    transition:0.3s;
+    box-shadow:0 0 20px rgba(168,85,247,0.2);
 }
-.choice-btn:hover{
-    background:linear-gradient(45deg,#a855f7,#7e22ce);
+.gallery-grid img:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 35px rgba(168,85,247,0.6);
 }
 
-.vn-image{
-    margin-top:25px;
-    max-width:100%;
-    border-radius:15px;
-    display:none;
-    box-shadow:0 0 25px rgba(168,85,247,0.4);
+/* 모달 */
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.8);
+    backdrop-filter:blur(10px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:0.3s;
+}
+.modal.active{
+    opacity:1;
+    pointer-events:all;
+}
+.modal img{
+    max-width:80%;
+    max-height:80%;
+    border-radius:20px;
+    box-shadow:0 0 50px rgba(168,85,247,0.7);
 }
 
 /* 로딩 */
@@ -154,10 +186,14 @@ body::before{
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    opacity:0;pointer-events:none;
+    opacity:0;
+    pointer-events:none;
     transition:0.4s;
 }
-#loading-screen.active{opacity:1;pointer-events:all;}
+#loading-screen.active{
+    opacity:1;
+    pointer-events:all;
+}
 .loader{
     width:60px;height:60px;
     border:5px solid rgba(255,255,255,0.1);
@@ -165,15 +201,8 @@ body::before{
     border-radius:50%;
     animation:spin 1s linear infinite;
 }
-@keyframes spin{to{transform:rotate(360deg);}}
-.scan-line{
-    width:100%;height:2px;margin-top:20px;
-    background:linear-gradient(to right,transparent,#a855f7,transparent);
-    animation:scan 2s linear infinite;
-}
-@keyframes scan{
-    from{transform:translateY(-10px);}
-    to{transform:translateY(10px);}
+@keyframes spin{
+    to{transform:rotate(360deg);}
 }
 </style>
 </head>
@@ -184,21 +213,18 @@ body::before{
 
 <div class="top-menu">
     <button class="menu-btn active" onclick="showSection('intro',this)">소개</button>
-    <button class="menu-btn" onclick="showSection('vn',this)">선택지</button>
+    <button class="menu-btn" onclick="showSection('gallery',this)">갤러리</button>
 </div>
 
 <!-- 소개 -->
 <section id="intro" class="section active">
 
-    <!-- 🔽 여기에 이미지 링크 넣으면 됨 -->
     <img src="여기에_캐릭터이미지링크.jpg" class="character-img">
 
-    <h1 style="color:#c084fc;">캐릭터 이름</h1>
+    <h1>캐릭터 이름</h1>
 
-    <!-- 🔽 세계관 설명 영역 -->
     <div class="world-desc">
-        이곳에 세계관 설명을 자유롭게 작성하세요.
-        설정, 관계성, 배경 스토리 등을 넣을 수 있습니다.
+        이곳에 세계관 설명을 작성하세요.
     </div>
 
     <div class="chat-box">
@@ -208,23 +234,25 @@ body::before{
     <button class="play-btn" onclick="startLoading()">▶ 플레이 하기</button>
 </section>
 
-<!-- 선택지 -->
-<section id="vn" class="section">
-    <div class="vn-box">
-        <h2 style="color:#c084fc;">왜 나를 찾아왔지?</h2>
-
-        <button class="choice-btn" onclick="choose(1)">궁금해서.</button>
-        <button class="choice-btn" onclick="choose(2)">좋아하니까.</button>
-        <button class="choice-btn" onclick="choose(3)">도망치려고.</button>
-
-        <!-- 🔽 선택지 이미지 출력 -->
-        <img id="vnImage" class="vn-image">
+<!-- 갤러리 -->
+<section id="gallery" class="section">
+    <h2 style="color:#c084fc;margin-bottom:40px;">GALLERY</h2>
+    <div class="gallery-grid">
+        <img src="이미지1.jpg" onclick="openModal(this.src)">
+        <img src="이미지2.jpg" onclick="openModal(this.src)">
+        <img src="이미지3.jpg" onclick="openModal(this.src)">
+        <img src="이미지4.jpg" onclick="openModal(this.src)">
     </div>
 </section>
 
+<!-- 모달 -->
+<div id="modal" class="modal" onclick="closeModal()">
+    <img id="modalImg">
+</div>
+
+<!-- 로딩 -->
 <div id="loading-screen">
     <div class="loader"></div>
-    <div class="scan-line"></div>
     <div style="margin-top:20px;">CONNECTING...</div>
 </div>
 
@@ -246,13 +274,13 @@ function showSection(id,btn){
     btn.classList.add("active");
 }
 
-/* 선택지 이미지 변경 */
-function choose(n){
-    const img=document.getElementById("vnImage");
-    if(n===1) img.src="선택지1_이미지링크.jpg";
-    if(n===2) img.src="선택지2_이미지링크.jpg";
-    if(n===3) img.src="선택지3_이미지링크.jpg";
-    img.style.display="block";
+/* 모달 */
+function openModal(src){
+    document.getElementById("modalImg").src=src;
+    document.getElementById("modal").classList.add("active");
+}
+function closeModal(){
+    document.getElementById("modal").classList.remove("active");
 }
 
 /* 로딩 */
